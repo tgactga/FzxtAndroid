@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="#eee"
+    >
+
+    <RelativeLayout 
+		android:layout_width="fill_parent"
+		android:layout_height="80dip"
+		android:background="@drawable/top_bar"
+		android:gravity="center_vertical"  >  
+		<TextView 
+	 		android:id="@+id/back"
+	   		android:layout_width="450dip" 
+    		android:layout_height="70dip"
+    		android:layout_marginLeft="5dip"
+    		android:layout_centerVertical="true"
+    		android:clickable="true"
+    		android:onClick="go_back"
+			android:background="@drawable/tj_logo"
+	   		/>
+  		<TextView
+    		android:layout_width="wrap_content" 
+    		android:layout_height="wrap_content" 
+    		android:text="外科门诊"
+    		android:layout_centerInParent="true"
+    		android:textSize="50sp"		
+			android:textColor="#ffffff" /> 
+	</RelativeLayout>
+	
+    
+    
+    
+            
+    
+    
+    <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="80dip"
+			    android:orientation="horizontal"
+			    
+		>
+  		<LinearLayout 
+  		    android:layout_width="0dip"
+			    android:layout_weight="1"
+			    android:layout_height="80dip"
+			    android:orientation="horizontal"
+			    android:background="@drawable/table_title"
+			    >
+			    
+  		    	<RelativeLayout
+  		    	    android:layout_width="fill_parent"
+  		    	    android:layout_height="wrap_content"
+  		    	    android:layout_gravity="center_vertical"
+  		    	    android:gravity="center_vertical" >
+					    <ImageView
+						    android:id="@+id/doctor_head_image"
+						    android:layout_width="55dip"
+						    android:layout_height="80dip"
+						    android:layout_alignParentLeft="true"
+						    android:gravity="center_vertical"
+						    android:src="@drawable/doctor" />
+					    
+						<TextView
+						    android:id="@+id/doctor_name"
+						    android:layout_toRightOf="@id/doctor_head_image"
+						    android:text="医生"
+						    android:layout_width="wrap_content"
+						    android:layout_height="80dip"
+						    android:layout_alignParentBottom="true"
+						    android:layout_alignParentTop="true"
+						    android:gravity="center_vertical"
+						    android:textColor="#666"
+						    android:textSize="40sp" />
+					    
+			            <TextView
+			                android:id="@+id/roomname"
+			                android:layout_toRightOf="@id/doctor_name"
+			                android:layout_marginLeft="180dip"
+			                android:text="诊室"
+			                android:layout_width="wrap_content"
+						    android:layout_height="90dip"
+						    android:gravity="center_vertical"
+						    android:layout_alignParentBottom="true"
+						    android:layout_alignParentTop="true"
+						    android:textColor="#666"
+						    android:textSize="40sp" />
+		
+						
+						<TextView
+						    android:layout_toRightOf="@id/roomname"
+			                android:text="当前号"
+			                android:layout_marginLeft="180dip"
+			                android:layout_width="wrap_content"
+						    android:layout_height="80dip"
+						    android:gravity="center_vertical"
+						    android:layout_alignParentBottom="true"
+						    android:layout_alignParentTop="true"
+						    android:textColor="#666"
+						    android:textSize="40sp" />
+
+						
+
+					</RelativeLayout>
+			</LinearLayout>
+			
+  		<ImageView
+		    android:layout_width="1dip"
+		    android:layout_height="80dip"
+		    android:gravity="center_vertical"
+		    android:src="@drawable/white_line" />
+  		<LinearLayout
+  		    	android:layout_width="0dip"
+			    android:layout_weight="1"
+			    android:layout_height="80dip"
+			    android:orientation="horizontal"
+			    android:background="@drawable/table_title"
+			    >
+			    
+			    
+			</LinearLayout>
+			
+        
+        
+  	</LinearLayout>
+    <LinearLayout 
+        android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+        >
+        <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="0dip"
+		    android:layout_weight="9"
+		    android:orientation="horizontal"
+			>
+  			<LinearLayout 
+	  		    android:layout_width="0dip"
+			    android:layout_weight="1"
+			    android:layout_height="fill_parent"
+			    android:orientation="horizontal"
+			    >
+		    
+	 		    	<RelativeLayout
+	 		    	    android:layout_width="fill_parent"
+	 		    	    android:layout_height="fill_parent"
+	 		    	    android:layout_gravity="center_vertical"
+	 		    	    android:gravity="center_vertical" >
+					   
+						<ListView
+						    android:id="@+id/doctorquereList1"
+						    android:layout_marginLeft="0px"
+						    
+					    	android:layout_marginRight="0px"
+					    	android:divider="@null"
+						    android:layout_width="fill_parent"
+						    android:layout_height="fill_parent" 
+						    android:clickable="true" 
+					 		android:focusable="false"/>
+	
+					</RelativeLayout>
+				</LinearLayout>
+			
+		  		<ImageView
+				    android:layout_width="1dip"
+				    android:layout_height="fill_parent"
+				    android:gravity="center_vertical"
+				    android:src="@drawable/white_line" />
+	  			<LinearLayout 
+	  		    	android:layout_width="0dip"
+				    android:layout_weight="1"
+				    android:layout_height="fill_parent"
+				    android:orientation="horizontal"
+				    >
+				    
+	  		    	<RelativeLayout
+	  		    	    android:layout_width="fill_parent"
+	  		    	    android:layout_height="fill_parent"
+	  		    	    android:layout_gravity="center_vertical"
+	  		    	    android:gravity="center_vertical" >
+						   
+							<VideoView 
+						        android:id="@+id/videoView" 
+						        android:layout_width="fill_parent" 
+						        android:layout_height="fill_parent" 
+						        android:layout_gravity="center" /> 
+	
+						</RelativeLayout>
+				</LinearLayout>
+        
+  			</LinearLayout>
+  			
+			<LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="0dip"
+		    	android:layout_weight="1"
+			    android:orientation="horizontal"
+			    
+				>
+
+		  		<com.fzxt.common.MarqueeText 
+					android:id="@+id/marqueeText" 
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content" 
+					android:background="#339320" 
+					android:ellipsize="marquee" 
+					android:singleLine="true" 
+					android:text="这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的这才是真正的文字跑马灯效果这才是真正的字跑马灯效果这才是真正的" 
+					android:textColor="#000000" 
+					android:textSize="20dp" > 
+				</com.fzxt.common.MarqueeText> 
+
+			</LinearLayout>
+    </LinearLayout>
+    
+    
+    
+
+</LinearLayout>
