@@ -38,6 +38,7 @@ public class MainActivity2 extends WantupBaseActivity {
 	private Socket mSocket;
 	private String waitIp;
 	private String clinicId;
+	private HttpUtil httpUtil = new HttpUtil();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class MainActivity2 extends WantupBaseActivity {
 				paramsMap.put("clinicId", clinicId);
 				paramsMap.put("start", "0");
 				paramsMap.put("end", "10");
-				String result = HttpUtil.postRequest(HttpUtil.BASE_URL+"/fzxtAction!getDoctorQueueForAndroid.do", paramsMap);
+				String result = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!getDoctorQueueForAndroid.do", paramsMap);
 				
 				if(result != null && result.length()>0){
 					List<Map> listMap = CkxTrans.getList(result);
@@ -177,7 +178,7 @@ public class MainActivity2 extends WantupBaseActivity {
 								}
 							}
 						}else{
-							mSocket = new Socket(waitIp, HttpUtil.socketServerPort);
+							mSocket = new Socket(waitIp, httpUtil.socketServerPort);
 			    			//取得输入、输出流
 			    			BufferedReader mBufferedReader = new BufferedReader(new InputStreamReader(mSocket.getInputStream(),"UTF-8"));
 			    			PrintWriter mPrintWriter = new PrintWriter(mSocket.getOutputStream(), true);
@@ -238,7 +239,7 @@ public class MainActivity2 extends WantupBaseActivity {
 						BufferedReader mBufferedReader = null;
 						PrintWriter mPrintWriter;
 		        		//连接服务器
-						Socket mSocket1 = new Socket(waitIp, HttpUtil.socketServerPort);
+						Socket mSocket1 = new Socket(waitIp, httpUtil.socketServerPort);
 						if(mSocket1 != null){
 			    			//取得输入、输出流
 			    			mBufferedReader = new BufferedReader(new InputStreamReader(mSocket1.getInputStream(),"UTF-8"));
@@ -259,7 +260,7 @@ public class MainActivity2 extends WantupBaseActivity {
 						    			MessageSocket.setmPrintWriter(mPrintWriter);
 									}
 								}*/
-								mSocket = new Socket(waitIp, HttpUtil.socketServerPort);
+								mSocket = new Socket(waitIp, httpUtil.socketServerPort);
 				    			//取得输入、输出流
 				    			BufferedReader mBufferedReader1 = new BufferedReader(new InputStreamReader(mSocket.getInputStream(),"UTF-8"));
 				    			PrintWriter mPrintWriter1 = new PrintWriter(mSocket.getOutputStream(), true);

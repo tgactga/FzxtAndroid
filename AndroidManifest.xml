@@ -65,6 +65,7 @@
             
         </activity>
         
+        <service android:name=".service.UpdateService" android:sharedUserId="android.uid.system" />
     </application>
 
 </manifest>

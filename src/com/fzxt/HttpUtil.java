@@ -34,34 +34,49 @@ public class HttpUtil {
 	public static HttpClient httpClient = new DefaultHttpClient();
 	//服务跳转的URL不变的那部分
 
-	public static int socketServerPort = 9094;
-	public static String webServerPort = "8080";
+	public int socketServerPort = 0;
+	public String webServerPort = null;
 	
 //	public static String hostName = "192.168.1.103";
 //	public static String userName = "vs2008";
 //	public static String password = "1";
 //	public static String serverIp = "192.168.1.103";
 	
-	public static String ftpHostName = "192.168.12.14";
-	public static String userName = "fzxtftp";
-	public static String password = "fzxtftp";
-	public static String webServerIp = "10.35.51.73";
+	public String ftpHostName = null;
+	public String userName = null;
+	public String password = null;
+	public String webServerIp = null;
 	
-	public static String localFilePath = "/mnt/sdcard/";
-	/*static{
+	public String localFilePath = "/mnt/sdcard/";
+	public String BASE_URL = null;
+	public String updateServerUrl = null;
+	public String downloadPath = null;
+	
+	public HttpUtil(){
 		Properties props = new Properties();     
-        InputStream in = HttpUtil.class.getResourceAsStream("/netconfig.properties");     
         try {     
-//            props.load(in);
-//            serverIp = props.getProperty("serverIp");
-//            socketServerPort = Integer.parseInt(props.getProperty("socketServerPort"));
-//            webServerPort = props.getProperty("webServerPort");
+            props.load(HttpUtil.class.getResourceAsStream("netconfig.properties"));
+            setFtpHostName( props.getProperty("ftpHostName"));
+            setUserName(props.getProperty("userName"));
+            setPassword(props.getProperty("password"));
+            setWebServerIp(props.getProperty("webServerIp"));
+            setSocketServerPort(Integer.parseInt(props.getProperty("socketServerPort")));
+            setWebServerPort(props.getProperty("webServerPort"));
+            
+            BASE_URL = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/";
+            updateServerUrl = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/update.xml";
         } catch (Exception e) {     
             e.printStackTrace();     
         }
-	}*/
-	public static final String BASE_URL = "http://"+webServerIp+":"+webServerPort+"/fzxt_tj/";
-	public static final String updateServerUrl = "http://"+webServerIp+":"+webServerPort+"/fzxt_tj/update.xml";
+	}
+	
+	
+	
+	
+	
+	
+//	public final String BASE_URL = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/";
+//	public final String updateServerUrl = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/update.xml";
 	
 	public static final String key = "1111111111111111";
 	//请求超时时间20秒
@@ -315,6 +330,57 @@ public class HttpUtil {
 		 */
 		public void execute(T result, Exception e);
 	}
+	public int getSocketServerPort() {
+		return socketServerPort;
+	}
+
+	public void setSocketServerPort(int socketServerPort) {
+		this.socketServerPort = socketServerPort;
+	}
+
+	public String getWebServerPort() {
+		return webServerPort;
+	}
+
+	public void setWebServerPort(String webServerPort) {
+		this.webServerPort = webServerPort;
+	}
+
+	public String getFtpHostName() {
+		return ftpHostName;
+	}
+
+	public void setFtpHostName(String ftpHostName) {
+		this.ftpHostName = ftpHostName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getWebServerIp() {
+		return webServerIp;
+	}
+
+	public void setWebServerIp(String webServerIp) {
+		this.webServerIp = webServerIp;
+	}
 	
 
+	
+	
+	
+	
 }

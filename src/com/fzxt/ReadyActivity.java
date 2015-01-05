@@ -14,6 +14,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -45,6 +46,7 @@ import android.widget.Toast;
 import com.fzxt.common.NetWorkManager;
 import com.fzxt.ftp.FTP;
 import com.fzxt.ftp.Result;
+import com.fzxt.service.UpdateService;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class ReadyActivity extends WantupBaseActivity {
@@ -56,9 +58,11 @@ public class ReadyActivity extends WantupBaseActivity {
 	private static final int UPDATE_CLIENT =100;
 	private static final int GET_UNDATAINFO_ERROR =101;
 	private static final int DOWN_ERROR = 41;
-	private String downloadPath = null;
+	
 	private String serverVersion = null;
 	private String description = null;
+	private static HttpUtil httpUtil = new HttpUtil();
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +71,14 @@ public class ReadyActivity extends WantupBaseActivity {
 		
 		//ip = getLocalIpAddress();
         ip = getIPAddress(true,this);
+        System.out.println("ip--------"+ip);
         if(testConnect()){
         	postTask(new NetTask() {
     			@Override
     			public Object execute() throws Exception {
     				
     				try {
-    		        	ftp = new FTP(HttpUtil.ftpHostName, HttpUtil.userName, HttpUtil.password);
+    		        	ftp = new FTP(httpUtil.getFtpHostName(), httpUtil.getUserName(), httpUtil.getPassword());
     					ftp.openConnect();
     				} catch (IOException e) {
     					e.printStackTrace();
@@ -83,7 +88,7 @@ public class ReadyActivity extends WantupBaseActivity {
     				paramsMap.put("ip", ip);
     				paramsMap.put("start", "0");
     				paramsMap.put("end", "10");
-    				String result = HttpUtil.postRequest(HttpUtil.BASE_URL+"/fzxtAction!findComputerInfoByComputerIp.do", paramsMap);
+    				String result = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!findComputerInfoByComputerIp.do", paramsMap);
     				
     				if(result != null && result.length()>0){
     					List<Map> listMap = CkxTrans.getList(result);
@@ -103,19 +108,20 @@ public class ReadyActivity extends WantupBaseActivity {
     			@Override
     			public void execute(Exception e, Object result) {
     				if(info.getWait_ip() != null){
-    					Toast.makeText(ReadyActivity.this, "111", 0).show();
+    					Toast.makeText(ReadyActivity.this, "分诊台IP："+info.getWait_ip(), 0).show();
     				}else{
     					AlertDialog.Builder builer = new Builder(ReadyActivity.this); 
     			        builer.setTitle("请与管理员联系");  
     			        builer.setMessage("未找到IP配置信息");  
     			        AlertDialog dialog = builer.create();  
-    			        dialog.show();  
+    			        dialog.show();
     				}
     			}
     		}, true);
         	
         }else{
-        	new NetWorkManager().openWirelessSettings(this);
+        	//new NetWorkManager().openWirelessSettings(this);
+        	Toast.makeText(this, "无可用网络", Toast.LENGTH_SHORT);
         }
         
 	}
@@ -227,7 +233,7 @@ public class ReadyActivity extends WantupBaseActivity {
 
 		@Override
 		public void run() {
-			String serverPath = HttpUtil.updateServerUrl;
+			String serverPath = httpUtil.updateServerUrl;
 			
 			try {
 				URL url = new URL(serverPath);
@@ -245,7 +251,7 @@ public class ReadyActivity extends WantupBaseActivity {
 						if("version".equals(parser.getName())){
 							serverVersion = parser.nextText();
 						}else if ("url".equals(parser.getName())){
-			                downloadPath = parser.nextText();
+			                httpUtil.downloadPath = parser.nextText();
 			            }else if ("description".equals(parser.getName())){
 			                description = parser.nextText();
 			            }
@@ -325,15 +331,22 @@ public class ReadyActivity extends WantupBaseActivity {
 			public Object execute() throws Exception {
 				try {
 					
-			        
-					ftp.download(FTP.REMOTE_PATH + info.getClinicid(), null, HttpUtil.localFilePath + info.getClinicid());
-					Result downloadResult = ftp.download(FTP.REMOTE_PATH+"/androidApk", downloadPath , HttpUtil.localFilePath);
+					Log.d(TAG, "download start");
+					//下载视频
+					ftp.download(FTP.REMOTE_PATH + info.getClinicid(), null, httpUtil.localFilePath + info.getClinicid());
+					//下载新版本,如果有旧文件，先删除
+					File apkFile = new File(httpUtil.localFilePath + httpUtil.downloadPath);
+					if(apkFile.exists()){
+						apkFile.delete();
+					}
+					Result downloadResult = ftp.download(FTP.REMOTE_PATH+"/androidApk", httpUtil.downloadPath , httpUtil.localFilePath);
 					if (downloadResult.isSucceed()) {
 			              Log.d(TAG, "download ok");
-			              String fileName = HttpUtil.localFilePath + downloadPath;
-			              Intent intent = new Intent(Intent.ACTION_VIEW);
-			              intent.setDataAndType(Uri.fromFile(new File(fileName)), "application/vnd.android.package-archive");
-			              startActivity(intent);
+			              
+			              Intent intent1 = new Intent(ReadyActivity.this,UpdateService.class);
+			              startService(intent1);
+			              
+			              
 			              
 			          } else {
 			              Log.d(TAG, "download fail");
@@ -355,7 +368,7 @@ public class ReadyActivity extends WantupBaseActivity {
 				// TODO Auto-generated method stub
 				
 			}
-		});
+		},true);
 		
           
 	  }
@@ -371,7 +384,7 @@ public class ReadyActivity extends WantupBaseActivity {
 		}
 		else if("3".equals(info.getView_model())){
 			intent.setClass(ReadyActivity.this, MainActivity3.class);
-			intent.putExtra("videoUrl", HttpUtil.localFilePath+info.getClinicid());
+			intent.putExtra("videoUrl", httpUtil.localFilePath+info.getClinicid());
 		}else{
 			intent.setClass(ReadyActivity.this, MainActivity.class);
 			
