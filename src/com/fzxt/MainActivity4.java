@@ -40,7 +40,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class MainActivity3 extends WantupBaseActivity {
+public class MainActivity4 extends WantupBaseActivity {
 	private ListView listView1;
 	private DoctorQueueListAdapter adapter1;
 	private List<Doctor> list1 = new ArrayList<Doctor>();
@@ -49,8 +49,9 @@ public class MainActivity3 extends WantupBaseActivity {
 	public  String mStrMSG = "";
 	private String split = "&";
 	private String localIp = "0.0.0.0";
-	private TextView current_numView;
 	private TextView clinicNameView;
+	private TextView currentPnameView;
+	private TextView prePnameView;
 	private Socket mSocket;
 	private String waitIp;
 	private String clinicId;
@@ -69,7 +70,7 @@ public class MainActivity3 extends WantupBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main3);
+		setContentView(R.layout.activity_main4);
 		listView1 = (ListView) findViewById(R.id.doctorquereList1);
 		videoView = (VideoView) findViewById(R.id.videoView);
 		
@@ -78,40 +79,14 @@ public class MainActivity3 extends WantupBaseActivity {
 		clinicId = this.getIntent().getStringExtra("clinicId");
 		clinicNameView = (TextView) findViewById(R.id.clinic_name);
 		marqueeText = (MarqueeText) findViewById(R.id.marqueeText);
-		
+		currentPnameView = (TextView) findViewById(R.id.current_pname);
+		prePnameView = (TextView) findViewById(R.id.pre_pname);
 		postTask(new NetTask() {
 
 			@Override
 			public Object execute() throws Exception {
-				
 				Map<String,String> paramsMap = new HashMap<String,String>();
-				paramsMap.put("ip", localIp);
 				paramsMap.put("clinicId", clinicId);
-				paramsMap.put("start", "0");
-				paramsMap.put("end", "10");
-				String result = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!getDoctorQueueForAndroid.do", paramsMap);
-				List<Map> listMap = CkxTrans.getList(result);
-				if(result != null && result.length()>0){
-					
-					for(Map map :listMap){
-						Doctor doctor = new Doctor();
-						String doctorName = map.get("doctorName")+"";
-						String roomName = map.get("roomName")+"";
-						String currentNum = map.get("currentNum")+"";
-						doctor.setDoctorName(doctorName);
-						doctor.setRoomName(roomName);
-						doctor.setCurrentNum(currentNum);
-						list1.add(doctor);
-					}
-					
-					
-				}
-				int size = listMap.size();
-				while(size<6){
-					Doctor doctor = new Doctor();
-					list1.add(doctor);
-					size++;
-				}
 				String result2 = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!getClinicNameByClinicId.do", paramsMap);
 				List<Map> listMap2 = CkxTrans.getList(result2);
 				for(Map map :listMap2){
@@ -125,9 +100,15 @@ public class MainActivity3 extends WantupBaseActivity {
 			@Override
 			public void execute(Exception e, Object result) {
 				if(e != null){
-					Toast.makeText(MainActivity3.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity4.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 				}else{
-					adapter1 = new DoctorQueueListAdapter(list1);
+					int size=0;
+					while(size<6){
+						Doctor doctor = new Doctor();
+						list1.add(doctor);
+						size++;
+					}
+					adapter1 = new DoctorQueueListAdapter();
 					listView1.setAdapter(adapter1);
 					
 				}
@@ -160,7 +141,7 @@ public class MainActivity3 extends WantupBaseActivity {
                     KeyEvent event) { 
                 if (keyCode == KeyEvent.KEYCODE_BACK) { 
                     dialog.dismiss(); 
-                    MainActivity3.this.finish(); 
+                    MainActivity4.this.finish(); 
                 } 
                 return false; 
             } 
@@ -255,30 +236,28 @@ public class MainActivity3 extends WantupBaseActivity {
 
 	class DoctorQueueListAdapter extends WantupAdapter<Doctor>{
 
-		private List<Doctor> list;
-		public DoctorQueueListAdapter(List<Doctor> tList) {
-			super(MainActivity3.this, R.layout.doctor_queue_sub, tList);
-			this.list = tList;
+		public DoctorQueueListAdapter() {
+			super(MainActivity4.this, R.layout.doctor_queue_sub4,list1);
 		}
 
 		@Override
 		public View getRowView(int position, View convertView, ViewGroup parent) {
-			TextView doctor_nameView = (TextView) convertView.findViewById(R.id.doctor_name);
-			doctor_nameView.setText(list.get(position).getDoctorName());
+			currentPnameView = (TextView) convertView.findViewById(R.id.current_pname);
+			currentPnameView.setText(list1.get(position).getDoctorName());
 			
-			TextView roomnameView = (TextView) convertView.findViewById(R.id.roomname);
-			roomnameView.setText(list.get(position).getRoomName());
+			prePnameView = (TextView) convertView.findViewById(R.id.pre_pname);
+			prePnameView.setText(list1.get(position).getRoomName());
 			
-			current_numView = (TextView) convertView.findViewById(R.id.current_num);
-			current_numView.setText(list.get(position).getCurrentNum());
+//			current_numView = (TextView) convertView.findViewById(R.id.current_num);
+//			current_numView.setText(list.get(position).getCurrentNum());
 			
 			int colorPos = position%colors.length;  
 //			convertView.setBackgroundColor(); 
 			convertView.setBackgroundResource(colors[colorPos]);
 			
-			doctor_nameView.setTextColor(textColors[colorPos]);
-			roomnameView.setTextColor(textColors[colorPos]);
-			current_numView.setTextColor(textColors[colorPos]);
+			currentPnameView.setTextColor(textColors[colorPos]);
+			prePnameView.setTextColor(textColors[colorPos]);
+//			current_numView.setTextColor(textColors[colorPos]);
 			return convertView;
 		}
 		
@@ -332,16 +311,32 @@ public class MainActivity3 extends WantupBaseActivity {
 						String[] msgArr = messageTmp.split(split);
 						if(msgArr.length > 1){
 							
-							String currentNum = msgArr[3];
+							/*String currentNum = msgArr[3];
 							for(Doctor doctor : list1){
 								String roomname = doctor.getRoomName();
 								if(msgArr[2].trim().equals(roomname)){
 									doctor.setCurrentNum(currentNum+"号"+msgArr[1]);
 									adapter1.notifyDataSetChanged();
 								}
+							}*/
+							String currentPname = msgArr[0]+"号"+msgArr[1]+"到"+msgArr[2];
+							String prePname = "";
+							if(msgArr[5].isEmpty() && msgArr[7].isEmpty()){
+								
+							}else if(msgArr[5].isEmpty() | msgArr[7].isEmpty()){
+								prePname = msgArr[5]+msgArr[7]+"准备";
+							}else{
+								prePname = msgArr[5]+","+msgArr[7]+"准备";
 							}
+							Doctor doctor = new Doctor();
+							doctor.setDoctorName(currentPname);
+							doctor.setRoomName(prePname);
 							
-							
+							list1.add(0,doctor);
+							if(list1.size()>6){
+								list1.remove(list1.size()-1);
+							}
+							adapter1.notifyDataSetChanged();
 							//宣教模式下叫号不显示大屏幕
 							
 							/*if (videoView != null) { 

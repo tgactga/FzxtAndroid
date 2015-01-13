@@ -1,5 +1,6 @@
 package com.fzxt;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 
@@ -65,6 +67,19 @@ public class HttpUtil {
             
             BASE_URL = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/";
             updateServerUrl = "http://"+getWebServerIp()+":"+getWebServerPort()+"/fzxt_tj/update.xml";
+            
+            
+            if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            	File ramPath = Environment.getDataDirectory();
+            	localFilePath = ramPath.getPath();
+            }else{
+            	localFilePath = Environment.getExternalStorageDirectory()  
+                        .getAbsolutePath()+"/";  
+            }
+            
+            
+            
+            
         } catch (Exception e) {     
             e.printStackTrace();     
         }

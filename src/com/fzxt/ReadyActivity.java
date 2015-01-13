@@ -198,7 +198,7 @@ public class ReadyActivity extends WantupBaseActivity {
 	 * @return address or empty string
 	 */
 	public String getIPAddress(boolean useIPv4, Context context) {
-		WifiManager wifimanage = (WifiManager) context
+		/*WifiManager wifimanage = (WifiManager) context
 				.getSystemService(context.WIFI_SERVICE);// 获取WifiManager
 		// 检查wifi是否开启
 		if (wifimanage.isWifiEnabled()) {
@@ -213,7 +213,29 @@ public class ReadyActivity extends WantupBaseActivity {
 			final String myip = ip.substring(ip.indexOf("ip") + 2,
 					ip.indexOf("mask")).trim();
 			return myip;
+		}*/
+		try{
+			String ipaddress = "";
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+			    NetworkInterface intf = en.nextElement();
+			    if (intf.getName().toLowerCase().equals("eth0") || intf.getName().toLowerCase().equals("wlan0")) { 
+			    	for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+			    		InetAddress inetAddress = enumIpAddr.nextElement();
+			    		if (!inetAddress.isLoopbackAddress()) {
+			    			ipaddress = inetAddress.getHostAddress().toString();
+			    			if(!ipaddress.contains("::")){//ipV6的地址
+			    				return ipaddress;
+			    			}
+			    		}
+			    	}
+			    } else {
+			    	continue;
+			    }
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
+		return null;
 
 	}
 	
@@ -266,6 +288,9 @@ public class ReadyActivity extends WantupBaseActivity {
 				String versionName = packInfo.versionName;
 				if(versionName.endsWith(serverVersion)){
 					Log.d(TAG, "版本相同，无需升级");
+					//检查是否有视频文件，并下载
+					ftp.download(FTP.REMOTE_PATH + info.getClinicid(), null, httpUtil.localFilePath + info.getClinicid());
+					Log.d(TAG, "下载完成");
 					startActivityForMain();
 				}else{
 					Log.d(TAG, "版本号不同，需要升级");
@@ -384,6 +409,10 @@ public class ReadyActivity extends WantupBaseActivity {
 		}
 		else if("3".equals(info.getView_model())){
 			intent.setClass(ReadyActivity.this, MainActivity3.class);
+			intent.putExtra("videoUrl", httpUtil.localFilePath+info.getClinicid());
+		}
+		else if("4".equals(info.getView_model())){
+			intent.setClass(ReadyActivity.this, MainActivity4.class);
 			intent.putExtra("videoUrl", httpUtil.localFilePath+info.getClinicid());
 		}else{
 			intent.setClass(ReadyActivity.this, MainActivity.class);

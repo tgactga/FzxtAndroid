@@ -49,7 +49,7 @@ public class FTP {
     /**
      * FTP根目录.
      */
-    public static final String REMOTE_PATH = "\\";
+    public static final String REMOTE_PATH = "/";
 
     /**
      * FTP当前目录.
