@@ -296,7 +296,7 @@ public class MainActivity3 extends WantupBaseActivity {
 							if(MessageSocket.mBufferedReader != null){
 								MessageSocket.mBufferedReader.mark(8192);
 								String tmpMsg = "";
-								if ( (tmpMsg = MessageSocket.mBufferedReader.readLine()) != null && !tmpMsg.isEmpty() ) {
+								if ( (tmpMsg = MessageSocket.mBufferedReader.readLine()) != null && !tmpMsg.isEmpty() && !tmpMsg.equals("close")) {
 										//消息换行
 										mStrMSG = new String(tmpMsg);
 										mHandler.sendMessage(mHandler.obtainMessage());
@@ -331,17 +331,25 @@ public class MainActivity3 extends WantupBaseActivity {
 						String messageTmp = mStrMSG;
 						String[] msgArr = messageTmp.split(split);
 						if(msgArr.length > 1){
-							
+							boolean has = false;
 							String currentNum = msgArr[3];
 							for(Doctor doctor : list1){
 								String roomname = doctor.getRoomName();
 								if(msgArr[2].trim().equals(roomname)){
+									has = true;
 									doctor.setCurrentNum(currentNum+"号"+msgArr[1]);
-									adapter1.notifyDataSetChanged();
+									
 								}
 							}
-							
-							
+							if(!has){
+								Doctor doc1 = new Doctor();
+								doc1.setDoctorName(msgArr[8]);
+								doc1.setRoomName(msgArr[2]);
+								doc1.setCurrentNum(currentNum+"号"+msgArr[1]);
+								list1.remove(list1.size()-1);
+								list1.add(0,doc1);
+							}
+							adapter1.notifyDataSetChanged();
 							//宣教模式下叫号不显示大屏幕
 							
 							/*if (videoView != null) { 
