@@ -34,20 +34,22 @@ public class MarqueeText extends TextView implements Runnable {
 	* 获取文字宽度
 	*/ 
 	private void getTextWidth() {
-		Paint paint = this.getPaint(); 
+		
 		String str = this.getText().toString();
+		
+		Paint paint = this.getPaint(); 
 		textWidth = (int) paint.measureText(str);
 	}
 	@Override
 	public void run() {
-		currentScrollX -= 4;// 滚动速度
+		currentScrollX += 2;// 滚动速度
 		scrollTo(currentScrollX, 0);
 		if (isStop) {
 			return;
 		}
-		if (getScrollX() <= -(this.getWidth())) {
-			scrollTo(textWidth, 0);
-			currentScrollX = textWidth;
+		if (getScrollX() >= textWidth+30) {
+			scrollTo(0, 0);
+			currentScrollX = 0;
 			// return;
 		}
 		postDelayed(this, 5);

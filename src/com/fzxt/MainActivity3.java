@@ -66,6 +66,8 @@ public class MainActivity3 extends WantupBaseActivity {
     private MediaController controller;
     private HttpUtil httpUtil = new HttpUtil();
     private MarqueeText marqueeText;
+    
+    private int rowSize = 8;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,8 +79,29 @@ public class MainActivity3 extends WantupBaseActivity {
 		waitIp = this.getIntent().getStringExtra("waitIp");
 		clinicId = this.getIntent().getStringExtra("clinicId");
 		clinicNameView = (TextView) findViewById(R.id.clinic_name);
-	//	marqueeText = (MarqueeText) findViewById(R.id.marqueeText);
+		marqueeText = (MarqueeText) findViewById(R.id.marqueeText);
 		
+		/*String originalString = marqueeText.getText()+"";
+		StringBuffer stringBuffer = new StringBuffer(originalString);*/
+		
+		String str = "              " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   " +
+				"                   "
+				+ marqueeText.getText();
+		
+		
+		marqueeText.setText(str);
+		 
 		postTask(new NetTask() {
 
 			@Override
@@ -89,7 +112,7 @@ public class MainActivity3 extends WantupBaseActivity {
 				paramsMap.put("clinicId", clinicId);
 				paramsMap.put("start", "0");
 				paramsMap.put("end", "10");
-				String result = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!getDoctorQueueForAndroid.do", paramsMap);
+				/*String result = HttpUtil.postRequest(httpUtil.BASE_URL+"/fzxtAction!getDoctorQueueForAndroid.do", paramsMap);
 				List<Map> listMap = CkxTrans.getList(result);
 				if(result != null && result.length()>0){
 					
@@ -106,8 +129,9 @@ public class MainActivity3 extends WantupBaseActivity {
 					
 					
 				}
-				int size = listMap.size();
-				while(size<6){
+				int size = listMap.size();*/
+				int size = 0;
+				while(size < rowSize){
 					Doctor doctor = new Doctor();
 					list1.add(doctor);
 					size++;
@@ -221,7 +245,7 @@ public class MainActivity3 extends WantupBaseActivity {
             }  
         });
         
-//        marqueeText.startFor0();
+        marqueeText.startFor0();
 	}
 	
 	

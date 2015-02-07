@@ -20,6 +20,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- 自动安装apk的权限 -->
    <!--  <uses-permission android:name="android.permission.INSTALL_PACKAGES"/> -->
+   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+   
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_project"
@@ -37,6 +39,14 @@
             </intent-filter>
         </activity>
         
+         <!-- 开机自启动 -->
+        <receiver android:name="com.fzxt.BootBroadcastReceiver">
+	        <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		        <category android:name="android.intent.category.HOME" />
+	        </intent-filter>
+	    </receiver>
+	    
         <activity
             android:name=".MainActivity"
             android:theme="@android:style/Theme.NoTitleBar"
@@ -71,6 +81,10 @@
         </activity>
         
         <service android:name=".service.UpdateService" android:sharedUserId="android.uid.system" />
+        
+        
+       
+	    
     </application>
 
 </manifest>
