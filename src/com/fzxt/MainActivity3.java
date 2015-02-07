@@ -320,7 +320,11 @@ public class MainActivity3 extends WantupBaseActivity {
 							if(MessageSocket.mBufferedReader != null){
 								MessageSocket.mBufferedReader.mark(8192);
 								String tmpMsg = "";
+<<<<<<< HEAD
 								if ( (tmpMsg = MessageSocket.mBufferedReader.readLine()) != null && !tmpMsg.isEmpty() && !"close".equals(tmpMsg)) {
+=======
+								if ( (tmpMsg = MessageSocket.mBufferedReader.readLine()) != null && !tmpMsg.isEmpty() && !tmpMsg.equals("close")) {
+>>>>>>> 16eb80f7dcf0c4e4fca8a9f8c4f07c873284d509
 										//消息换行
 										mStrMSG = new String(tmpMsg);
 										mHandler.sendMessage(mHandler.obtainMessage());
@@ -355,7 +359,11 @@ public class MainActivity3 extends WantupBaseActivity {
 						String messageTmp = mStrMSG;
 						String[] msgArr = messageTmp.split(split);
 						if(msgArr.length > 1){
+<<<<<<< HEAD
 							Boolean has = false;
+=======
+							boolean has = false;
+>>>>>>> 16eb80f7dcf0c4e4fca8a9f8c4f07c873284d509
 							String currentNum = msgArr[3];
 							for(Doctor doctor : list1){
 								String roomname = doctor.getRoomName();
@@ -367,6 +375,7 @@ public class MainActivity3 extends WantupBaseActivity {
 							}
 							if(!has){
 								Doctor doc1 = new Doctor();
+<<<<<<< HEAD
 								doc1.setCurrentNum(currentNum+"号"+msgArr[1]);
 								doc1.setRoomName(msgArr[2].trim());
 								doc1.setDoctorName(msgArr[8]);
@@ -376,6 +385,15 @@ public class MainActivity3 extends WantupBaseActivity {
 							}
 							adapter1.notifyDataSetChanged();
 							
+=======
+								doc1.setDoctorName(msgArr[8]);
+								doc1.setRoomName(msgArr[2]);
+								doc1.setCurrentNum(currentNum+"号"+msgArr[1]);
+								list1.remove(list1.size()-1);
+								list1.add(0,doc1);
+							}
+							adapter1.notifyDataSetChanged();
+>>>>>>> 16eb80f7dcf0c4e4fca8a9f8c4f07c873284d509
 							//宣教模式下叫号不显示大屏幕
 							
 							/*if (videoView != null) { 
