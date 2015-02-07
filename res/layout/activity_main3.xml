@@ -46,7 +46,7 @@
   		<LinearLayout 
   		    android:layout_width="0dip"
 			    android:layout_weight="1"
-			    android:layout_height="80dip"
+			    android:layout_height="65dip"
 			    android:orientation="horizontal"
 			    android:background="@drawable/table_title"
 			    >
@@ -115,7 +115,7 @@
   		<LinearLayout
   		    	android:layout_width="0dip"
 			    android:layout_weight="1"
-			    android:layout_height="80dip"
+			    android:layout_height="65dip"
 			    android:orientation="horizontal"
 			    android:background="@drawable/table_title"
 			    >
@@ -203,7 +203,7 @@
 			    android:background="#CDCD00"
 			    android:orientation="horizontal" >
 
-		  		<com.fzxt.common.MarqueeText
+		  		<!-- <com.fzxt.common.MarqueeText
 		  		    android:id="@+id/marqueeText"
 		  		    android:layout_width="fill_parent"
 		  		    android:layout_height="fill_parent"
@@ -215,7 +215,21 @@
 		  		    android:textColor="#000000"
 		  		    android:textSize="25dp" >
  
-				</com.fzxt.common.MarqueeText> 
+				</com.fzxt.common.MarqueeText>  -->
+				
+				<TextView
+		  		    android:id="@+id/marqueeText"
+		  		    android:layout_width="fill_parent"
+		  		    android:layout_height="fill_parent"
+		  		    android:layout_gravity="center_vertical|center_horizontal"
+		  		    android:gravity="center_vertical|center_horizontal"
+		  		    android:ellipsize="marquee"
+		  		    android:singleLine="true"
+		  		    android:text="请按照屏幕上的队列等候医生叫号就诊,谢谢配合!"
+		  		    android:textColor="#000000"
+		  		    android:textSize="25dp" >
+ 
+				</TextView> 
 
 			</LinearLayout>
     </LinearLayout>
